@@ -1,4 +1,4 @@
-<h1> Puissance 4 </h1>
+<h1 style="text-align: center;"> Puissance 4 </h1>
 
 Partie 1 : Réaliser un puissance 4 en version client uniquement
 
