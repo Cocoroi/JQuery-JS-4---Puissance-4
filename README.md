@@ -39,3 +39,6 @@ Partie 2 : Ajouter des “interactions” serveurs
 
 3) Maintenant on va essayer de sauvegarder la partie en temps réel, chaque fois qu’un joueur joue un coup, envoyer une requête ajax, contenant l’état de    la partie.
 4) Lorsqu’on charge la page, si une partie est en cours, rechargez la avec les données qui sont contenus en base de données
+
+
+⚠️ BDD faites avec MariaDB ⚠️
