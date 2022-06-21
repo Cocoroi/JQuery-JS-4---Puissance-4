@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $.ajax({
-        type : 'GET',
-        url : 'source.php?pre=1',
+        type: 'GET',
+        url: 'source.php?pre=1',
         dataType: 'json',
         success: function(data) {
             $sRouge = data.a;
@@ -49,7 +49,7 @@ class Puissance4 {
 
     createGrille() {
         const $grille = $(this.selector);
-        for(var i=0;i<6;i++) this.tab[i] = [];
+        for (var i = 0; i < 6; i++) this.tab[i] = [];
         $grille.empty();
         this.joueur = 'Rouge';
         for (let ligne = 0; ligne < this.LIGNES; ligne++) {
@@ -62,18 +62,22 @@ class Puissance4 {
                 $ligne.append($col);
                 this.tab[ligne][col] = 'empty';
                 $.ajax({
-                    type : 'POST',
-                    url : 'source.php?tab',
-                    data: {"tab" :JSON.stringify(this.tab)},
+                    type: 'POST',
+                    url: 'source.php?tab',
+                    data: {
+                        "tab": JSON.stringify(this.tab)
+                    },
                     dataType: 'json',
                 });
 
             }
             $grille.append($ligne);
             $.ajax({
-                type : 'POST',
-                url : 'source.php?currentPlayer',
-                data: {"currentPlayer" : this.joueur},
+                type: 'POST',
+                url: 'source.php?currentPlayer',
+                data: {
+                    "currentPlayer": this.joueur
+                },
                 dataType: 'json',
             });
         }
@@ -82,37 +86,41 @@ class Puissance4 {
             this.NbParties++;
             this.enCours = 1;
             $.ajax({
-                type : 'POST',
-                url : 'source.php?encours',
-                data: {"encours" : this.enCours},
+                type: 'POST',
+                url: 'source.php?encours',
+                data: {
+                    "encours": this.enCours
+                },
                 dataType: 'json',
             });
 
             $.ajax({
-                type : 'POST',
-                url : 'source.php?updateParties',
-                data: {"updateParties" : this.NbParties},
+                type: 'POST',
+                url: 'source.php?updateParties',
+                data: {
+                    "updateParties": this.NbParties
+                },
                 dataType: 'json',
             });
         }
 
         $('#score').text(" " + this.ScoreRouge + " - " + this.ScoreJaune + " ");
-        $('#nb_games').text("Partie n°"+this.NbParties);
+        $('#nb_games').text("Partie n°" + this.NbParties);
     }
 
-    loadGrille(){
+    loadGrille() {
         const $grille = $(this.selector);
         $grille.empty();
         for (let ligne = 0; ligne < this.tab.length; ligne++) {
             const $ligne = $('<div>').addClass('ligne', ligne);
             for (let col = 0; col < this.tab[ligne].length; col++) {
-                if(this.tab[ligne][col] == "Rouge") {
-                const $col = $('<div>')
-                    .addClass('col Rouge')
-                    .attr('data-col', col)
-                    .attr('data-ligne', ligne);
-                $ligne.append($col);
-                } else if(this.tab[ligne][col] == "Jaune") {
+                if (this.tab[ligne][col] == "Rouge") {
+                    const $col = $('<div>')
+                        .addClass('col Rouge')
+                        .attr('data-col', col)
+                        .attr('data-ligne', ligne);
+                    $ligne.append($col);
+                } else if (this.tab[ligne][col] == "Jaune") {
                     const $col = $('<div>')
                         .addClass('col Jaune')
                         .attr('data-col', col)
@@ -125,12 +133,12 @@ class Puissance4 {
                         .attr('data-ligne', ligne);
                     $ligne.append($col);
                 }
-            $grille.append($ligne);
+                $grille.append($ligne);
             }
         }
         $('#player').text(this.joueur);
         $('#score').text(" " + this.ScoreRouge + " - " + this.ScoreJaune + " ");
-        $('#nb_games').text("Partie n°"+this.NbParties);
+        $('#nb_games').text("Partie n°" + this.NbParties);
     }
 
     setupEventListeners() {
@@ -169,19 +177,23 @@ class Puissance4 {
             const j = $lastEmptyCell.attr('data-col');
             that.tab[i][j] = that.joueur;
             $.ajax({
-                type : 'POST',
-                url : 'source.php?tab',
-                data: {"tab" : JSON.stringify(that.tab)},
+                type: 'POST',
+                url: 'source.php?tab',
+                data: {
+                    "tab": JSON.stringify(that.tab)
+                },
 
             });
-            console.log(that.tab);
             const firstCell = $(`.col[data-ligne='0'][data-col='${col}']`);
 
             $('.col').removeClass(`next-Jaune`).removeClass(`next-Rouge`);
-            $("#jeton").css({"left": firstCell.position().left + 20, "top": firstCell.position().top + 20});
+            $("#jeton").css({
+                "left": firstCell.position().left + 20,
+                "top": firstCell.position().top + 20
+            });
             $("#jeton").addClass(`col ${that.joueur}`);
             $("#jeton").animate({
-                top : $lastEmptyCell.position().top +15
+                top: $lastEmptyCell.position().top + 15
             }, function() {
 
                 $("#jeton").removeClass(`col ${that.joueur}`);
@@ -192,12 +204,12 @@ class Puissance4 {
                 function checkWin() {
                     function checkH() {
                         for (let i = 0; i < lignes; i++) {
-                            for (let j = 0; j < cols-3; j++) {
+                            for (let j = 0; j < cols - 3; j++) {
                                 const cell = $(`.col[data-ligne='${i}'][data-col='${j}']`);
                                 const cell2 = $(`.col[data-ligne='${i}'][data-col='${j+1}']`);
                                 const cell3 = $(`.col[data-ligne='${i}'][data-col='${j+2}']`);
                                 const cell4 = $(`.col[data-ligne='${i}'][data-col='${j+3}']`);
-                                if(cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
+                                if (cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
                                     cell.addClass('jw');
                                     cell2.addClass('jw');
                                     cell3.addClass('jw');
@@ -209,14 +221,15 @@ class Puissance4 {
                         }
                     }
                     checkH();
+
                     function checkV() {
                         for (let j = 0; j < cols; j++) {
-                            for (let i = 0; i < lignes-3; i++) {
+                            for (let i = 0; i < lignes - 3; i++) {
                                 const cell = $(`.col[data-ligne='${i}'][data-col='${j}']`);
                                 const cell2 = $(`.col[data-ligne='${i+1}'][data-col='${j}']`);
                                 const cell3 = $(`.col[data-ligne='${i+2}'][data-col='${j}']`);
                                 const cell4 = $(`.col[data-ligne='${i+3}'][data-col='${j}']`);
-                                if(cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
+                                if (cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
                                     cell.addClass('jw');
                                     cell2.addClass('jw');
                                     cell3.addClass('jw');
@@ -228,6 +241,7 @@ class Puissance4 {
                         }
                     }
                     checkV();
+
                     function checkDiagLD() {
                         for (let i = 3; i < lignes; i++) {
                             for (let j = 0; j < cols; j++) {
@@ -235,7 +249,7 @@ class Puissance4 {
                                 const cell2 = $(`.col[data-ligne='${i-1}'][data-col='${j+1}']`);
                                 const cell3 = $(`.col[data-ligne='${i-2}'][data-col='${j+2}']`);
                                 const cell4 = $(`.col[data-ligne='${i-3}'][data-col='${j+3}']`);
-                                if(cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
+                                if (cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
                                     cell.addClass('jw');
                                     cell2.addClass('jw');
                                     cell3.addClass('jw');
@@ -247,6 +261,7 @@ class Puissance4 {
                         }
                     }
                     checkDiagLD();
+
                     function checkDiagDL() {
                         for (let i = 5; i > 0; i--) {
                             for (let j = 6; j > 0; j--) {
@@ -254,7 +269,7 @@ class Puissance4 {
                                 const cell2 = $(`.col[data-ligne='${i-1}'][data-col='${j-1}']`);
                                 const cell3 = $(`.col[data-ligne='${i-2}'][data-col='${j-2}']`);
                                 const cell4 = $(`.col[data-ligne='${i-3}'][data-col='${j-3}']`);
-                                if(cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
+                                if (cell.hasClass(that.joueur) && cell2.hasClass(that.joueur) && cell3.hasClass(that.joueur) && cell4.hasClass(that.joueur)) {
                                     cell.addClass('jw');
                                     cell2.addClass('jw');
                                     cell3.addClass('jw');
@@ -268,37 +283,41 @@ class Puissance4 {
                     checkDiagDL();
                 }
                 checkWin();
-                if(win) {
-
+                if (win) {
                     that.enCours = 0;
-                    console.log(that.enCours);
                     $.ajax({
-                        type : 'POST',
-                        url : 'source.php?encours',
-                        data: {"encours" : that.enCours},
+                        type: 'POST',
+                        url: 'source.php?encours',
+                        data: {
+                            "encours": that.enCours
+                        },
                         dataType: 'json',
                     });
 
                     win = false;
-                    $('h4').html("Victoire du Joueur <span class='"+ that.joueur +"'>" + that.joueur + "</span> !");
+                    $('h4').html("Victoire du Joueur <span class='" + that.joueur + "'>" + that.joueur + "</span> !");
                     $('.col.vide').removeClass('vide');
 
-                    if(that.joueur == "Rouge") {
+                    if (that.joueur == "Rouge") {
                         that.ScoreRouge++;
                         $('#score').text(" " + that.ScoreRouge + " - " + that.ScoreJaune + " ");
                         $.ajax({
-                            type : 'POST',
-                            url : 'source.php?scoreR',
-                            data: {"scoresR" : that.ScoreRouge},
+                            type: 'POST',
+                            url: 'source.php?scoreR',
+                            data: {
+                                "scoresR": that.ScoreRouge
+                            },
                             dataType: 'json',
                         });
                     } else {
                         that.ScoreJaune++;
                         $('#score').text(" " + that.ScoreRouge + " - " + that.ScoreJaune + " ");
                         $.ajax({
-                            type : 'POST',
-                            url : 'source.php?scoreJ',
-                            data: {"scoresJ" : that.ScoreJaune},
+                            type: 'POST',
+                            url: 'source.php?scoreJ',
+                            data: {
+                                "scoresJ": that.ScoreJaune
+                            },
                             dataType: 'json',
                         });
                     }
@@ -311,7 +330,7 @@ class Puissance4 {
                     for (let i = 0; i < lignes; i++) {
                         for (let j = 0; j < cols; j++) {
                             const cell = $(`.col[data-ligne='${i}'][data-col='${j}']`);
-                            if(cell.hasClass("Rouge") || cell.hasClass("Jaune")) {
+                            if (cell.hasClass("Rouge") || cell.hasClass("Jaune")) {
                                 total++;
                             }
                         }
@@ -328,13 +347,15 @@ class Puissance4 {
                     $('#restart').clone().appendTo('#reset');
                     return;
                 }
-                $lastEmptyCell.addClass(`next-${that.joueur}`);
+                $('.col').removeClass(`next-`+that.joueur);
                 that.joueur = that.joueur === 'Rouge' ? 'Jaune' : 'Rouge';
                 that.onJoueurMove();
                 $.ajax({
-                    type : 'POST',
-                    url : 'source.php?currentPlayer',
-                    data: {"currentPlayer" : that.joueur},
+                    type: 'POST',
+                    url: 'source.php?currentPlayer',
+                    data: {
+                        "currentPlayer": that.joueur
+                    },
                     dataType: 'json',
                 });
             })
@@ -347,11 +368,12 @@ class Puissance4 {
     restart() {
         $("#reset").empty();
         this.enCours = 1;
-        console.log(this.enCours);
         $.ajax({
-            type : 'POST',
-            url : 'source.php?encours',
-            data: {"encours" : this.enCours},
+            type: 'POST',
+            url: 'source.php?encours',
+            data: {
+                "encours": this.enCours
+            },
             dataType: 'json',
         });
         this.createGrille();
@@ -361,9 +383,11 @@ class Puissance4 {
         this.NbParties++;
         $('h2').text("Partie n°" + this.NbParties);
         $.ajax({
-            type : 'POST',
-            url : 'source.php?updateParties',
-            data: {"updateParties" : this.NbParties},
+            type: 'POST',
+            url: 'source.php?updateParties',
+            data: {
+                "updateParties": this.NbParties
+            },
             dataType: 'json',
         });
         $('#player').addClass(this.joueur);
